@@ -1,0 +1,22 @@
+{
+    "meta_retrieval_ts": "{{retrieval_ts}}",
+    "meta_website": "{{website}}",
+    "ad_url": "{{ad_url}}",
+    "ad_type": "{{ad_type}}",
+    "ad_tag": "{{ad_tag}}",
+    "ad_update_date": "{{ad_update_date}}",
+    "ad_caption": "{{ad_caption}}",
+    "ad_more_info_text": "{{ad_more_info_text}}",
+    "ad_text": "{{ad_text}}",
+    "ad_agency": "{{ad_agency}}",
+    "ad_has_images": "{{has_images}}",
+    "property_city": "{{property_city}}",
+    "property_district": "{{property_district}}",
+    "property_location": "{{property_location}}",
+    "property_price": "{{property_price}}",
+    "property_area": "{{property_area}}",
+    "property_rooms_quantity": "{{property_rooms_quantity}}",
+    "property_type": "{{property_type}}",
+    "property_floor_number": "{{property_floor_number}}",
+    "property_heating_type": "{{property_heating_type}}"
+}
