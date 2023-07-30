@@ -1,5 +1,5 @@
 {
-    "meta_retrieval_ts": "{{retrieval_ts}}",
+    "meta_retrieval_ts": "{{retrieval_ts | default(none)}}",
     "meta_website": "{{website}}",
     "ad_url": "{{ad_url}}",
     "ad_type": "{{ad_type}}",
