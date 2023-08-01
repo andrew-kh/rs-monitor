@@ -1,6 +1,6 @@
 {
-    "meta_retrieval_ts": "{{retrieval_ts | default(none)}}",
-    "meta_website": "{{website}}",
+    "meta_retrieval_ts": "{{meta_retrieval_ts}}",
+    "meta_website": "{{meta_website}}",
     "ad_url": "{{ad_url}}",
     "ad_type": "{{ad_type}}",
     "ad_tag": "{{ad_tag}}",
@@ -9,7 +9,7 @@
     "ad_more_info_text": "{{ad_more_info_text}}",
     "ad_text": "{{ad_text}}",
     "ad_agency": "{{ad_agency}}",
-    "ad_has_images": "{{has_images}}",
+    "ad_has_images": "{{ad_has_images}}",
     "property_city": "{{property_city}}",
     "property_district": "{{property_district}}",
     "property_location": "{{property_location}}",
