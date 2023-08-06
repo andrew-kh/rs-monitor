@@ -46,3 +46,47 @@ ad_type = breadcrumb_items[2].find('a').text.strip()
 property_city = breadcrumb_items[3].find('a').text.strip()
 property_district = breadcrumb_items[4].find('a').text.strip()
 property_location = breadcrumb_items[5].find('a').text.strip()
+
+# get ad update dt
+ad_update_div = ad_page.find_all('div', class_='visible-sm visible-md visible-lg')
+if len(ad_update_div) == 1:
+    ad_update_dt = ad_update_div[0].find('time').text.strip()
+
+# get ad caption
+ad_caption_html = ad_page.find_all(name='h1',
+                                   class_='fpogl-title text-primary',
+                                   itemprop='name')
+if len(ad_caption_html) == 1:
+    ad_caption = ad_caption_html[0].text.strip()
+
+# get ad text
+ad_text_obj=ad_page.find_all(name='div',
+                                   class_='col-sm-6')
+
+ad_text_list=[]
+for div in ad_text_obj:
+    ad_text_list.append(div.find_all(name='p'))
+
+if ad_text_list[1]==[]:
+    ad_text = ''.join([i.text for i in ad_text_list[0]])
+
+# get ad price
+ad_price_html=ad_page.find_all(name='h3',
+                 itemprop='offers')
+
+if len(ad_price_html)==1:
+    property_price=ad_price_html[0].find(name='span',
+                                         itemprop='price').text
+    property_currency=ad_price_html[0].find(name='span',
+                                            itemprop='priceCurrency').text
+
+
+# parse table with info
+div_with_table = ad_page.find_all(name='div',
+                                  class_='col-sm-6')
+ad_info_table=div_with_table[0]. \
+                find(name='table'). \
+                find_all(name='tr')
+ad_info_list=[(i.find_all(name='td')[0].text.strip(),
+               i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
+ad_info_dict={k:v for (k,v) in ad_info_list}
