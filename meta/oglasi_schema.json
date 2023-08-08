@@ -13,15 +13,6 @@
     "property_location": "{{property_location}}",
     "property_price": "{{property_price}}",
     "property_currency": "{{property_currency}}",
-    "property_area": "{{property_area}}",
-    "property_rooms_quantity": "{{property_rooms_quantity}}",
-    "property_type": "{{property_type}}",
-    "property_floor_number": "{{property_floor_number}}",
-<<<<<<< HEAD
-    "property_heating_type": "{{property_heating_type}}"
-}
-=======
-    "property_heating_type": "{{property_heating_type}}",
+    "property_info": "{{property_info}}",
     "property_number_of_views": "{{property_number_of_views}}"
 }
->>>>>>> 3a65ec0739c3d118d5f4344e8859450be91426dd
