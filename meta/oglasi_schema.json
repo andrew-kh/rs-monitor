@@ -13,6 +13,6 @@
     "property_location": "{{property_location}}",
     "property_price": "{{property_price}}",
     "property_currency": "{{property_currency}}",
-    "property_info": "{{property_info}}",
+    "property_info": "{{property_info | to_json}}",
     "property_number_of_views": "{{property_number_of_views}}"
 }
