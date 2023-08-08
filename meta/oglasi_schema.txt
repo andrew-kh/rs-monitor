@@ -15,7 +15,7 @@
     "property_currency": "{{property_currency}}",
     "property_info": {
         {% for prop in content %}
-            "{{ prop }}":"{{ content[prop]}}",
+            "{{ prop }}":"{{ content[prop]}}"{% if not loop.last %},{% endif %}
         {% endfor %}
     },
     "property_number_of_views": "{{property_number_of_views}}"

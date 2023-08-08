@@ -7,10 +7,7 @@ from jinja2 import Environment, FileSystemLoader, Template
 
 # jinja setup
 env = Environment(loader=FileSystemLoader('./meta/'))
-def to_json_filter(value):
-    return json.dumps(value)
-env.filters['to_json'] = to_json_filter
-template = env.get_template('oglasi_schema.json')
+template = env.get_template('oglasi_schema.txt')
 ad_object = template.render()
 
 # parser block
@@ -91,6 +88,6 @@ div_with_table = ad_page.find_all(name='div',
 ad_info_table=div_with_table[0]. \
                 find(name='table'). \
                 find_all(name='tr')
-ad_info_list=[(i.find_all(name='td')[0].text.strip(),
+ad_info_list=[(i.find_all(name='td')[0].text.strip().strip(":"),
                i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
 property_info={k:v for (k,v) in ad_info_list}
