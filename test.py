@@ -1,3 +1,4 @@
+import json
 import time
 import requests
 from bs4 import BeautifulSoup
@@ -6,6 +7,9 @@ from jinja2 import Environment, FileSystemLoader
 
 # jinja setup
 env = Environment(loader=FileSystemLoader('./meta/'))
+def to_json_filter(value):
+    return json.dumps(value)
+env.filters['to_json'] = to_json_filter
 template = env.get_template('oglasi_schema.json')
 ad_object = template.render()
 
@@ -89,4 +93,4 @@ ad_info_table=div_with_table[0]. \
                 find_all(name='tr')
 ad_info_list=[(i.find_all(name='td')[0].text.strip(),
                i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
-ad_info_dict={k:v for (k,v) in ad_info_list}
+property_info={k:v for (k,v) in ad_info_list}
