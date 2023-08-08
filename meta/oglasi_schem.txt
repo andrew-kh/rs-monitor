@@ -1,0 +1,25 @@
+{
+    "meta_retrieval_ts": "{{meta_retrieval_ts}}",
+    "meta_website": "{{meta_website}}",
+    "ad_url": "{{ad_url}}",
+    "ad_type": "{{ad_type}}",
+    "ad_update_dt": "{{ad_update_dt}}",
+    "ad_caption": "{{ad_caption}}",
+    "ad_text": "{{ad_text}}",
+    "ad_advertiser_info": "{{ad_agency}}",
+    "ad_has_images": "{{ad_has_images}}",
+    "property_city": "{{property_city}}",
+    "property_district": "{{property_district}}",
+    "property_location": "{{property_location}}",
+    "property_price": "{{property_price}}",
+    "property_currency": "{{property_currency}}",
+    "property_info": {
+        {% for prop in content %}
+            "{{ prop }}":"{{ content[prop]}}",
+        {% endfor %}
+    },
+    "property_number_of_views": "{{property_number_of_views}}"
+}
+{% for prop in content %}
+{{ prop }}:{{ content[prop] }}
+{% endfor %}
