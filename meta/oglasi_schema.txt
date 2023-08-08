@@ -20,6 +20,3 @@
     },
     "property_number_of_views": "{{property_number_of_views}}"
 }
-{% for prop in content %}
-{{ prop }}:{{ content[prop] }}
-{% endfor %}
