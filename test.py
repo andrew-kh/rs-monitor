@@ -1,3 +1,4 @@
+import re
 import json
 import time
 import requests
@@ -91,3 +92,14 @@ ad_info_table=div_with_table[0]. \
 ad_info_list=[(i.find_all(name='td')[0].text.strip().strip(":"),
                i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
 property_info={k:v for (k,v) in ad_info_list}
+
+# get number of views
+
+num_of_view_div = ad_page.find(name='div',
+                               text=re.compile('Broj pregleda')).text.strip()
+
+
+# get number of images in an ad
+
+ad_num_of_images = len(ad_page.find_all(name='figure'))
+
