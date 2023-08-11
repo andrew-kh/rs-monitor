@@ -94,8 +94,8 @@ ad_info_list=[(i.find_all(name='td')[0].text.strip().strip(":"),
 property_info={k:v for (k,v) in ad_info_list}
 
 # get number of views
-num_of_view_div = ad_page.find(name='div',
-                               text=re.compile('Broj pregleda')).text.strip()
+num_of_view_block = ad_page.find(name='div',
+                               string=re.compile('Broj pregleda')).text.strip()
 
 
 # get number of images in an ad
@@ -106,7 +106,12 @@ div_with_adv_info_table = ad_page.find_all(
     name='div',
     class_='default-widget')
 
-for i in div_with_adv_info_table:
-    inner_div = i.find_all(name='div')
-    for j in inner_div:
-        print(j.get('text'))
+adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra', 'Broj pregleda']
+adv_info_blocks_values=[]
+
+for block in adv_info_blocks_names:
+    val = ad_page.find(name='div',
+                       string=re.compile(block)).text.strip()
+    adv_info_blocks_values.append(val)
+
+{k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
