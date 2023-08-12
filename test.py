@@ -124,3 +124,23 @@ div_panel_body=ad_page.find_all(
 if len(div_panel_body)==1:
     panel_body=div_panel_body[0]
 
+panel_divs=panel_body.find_all(
+    name='div',
+    style='margin-bottom:12px'
+)
+
+# advertiser name
+advertiser_name_div = panel_divs[0].find_all(
+    name='div',
+    style='display:inline-block'
+)
+
+if advertiser_name_div:
+    advertiser_name=advertiser_name_div[0].text.strip()
+
+# advertiser contact
+contact_block=panel_divs[0].find_all(
+    name='a',
+    href=re.compile("tel:")
+)
+
