@@ -101,7 +101,7 @@ num_of_view_block = ad_page.find(name='div',
 # get number of images in an ad
 ad_num_of_images = len(ad_page.find_all(name='figure'))
 
-# get advertiser info
+# get advertiser info pt 1
 div_with_adv_info_table = ad_page.find_all(
     name='div',
     class_='default-widget')
@@ -115,3 +115,12 @@ for block in adv_info_blocks_names:
     adv_info_blocks_values.append(val)
 
 {k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
+
+# get advertiser info pt 2
+div_panel_body=ad_page.find_all(
+    name='div',
+    class_='panel-body')
+
+if len(div_panel_body)==1:
+    panel_body=div_panel_body[0]
+
