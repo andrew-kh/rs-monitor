@@ -3,7 +3,7 @@ import json
 import time
 import requests
 from bs4 import BeautifulSoup
-from jinja2 import Environment, FileSystemLoader, Template
+from jinja2 import Environment, FileSystemLoader
 
 
 # jinja setup
@@ -158,3 +158,20 @@ if num_of_ads_block[-1]:
     num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
     pattern.findall(num_of_ads)[0]
     advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
+
+
+ad_object = template.render(
+    meta_retrieval_ts=meta_retrieval_ts,
+    meta_website=meta_website,
+    ad_url=ad_url,
+    ad_type=ad_type,
+    property_city=property_city,
+    property_district=property_district,
+    property_location=property_location,
+    ad_update_dt=ad_update_dt,
+    ad_caption=ad_caption,
+    ad_text=ad_text,
+    property_price=property_price,
+    property_currency=property_currency,
+    ad_advertiser_info=property_info
+)
