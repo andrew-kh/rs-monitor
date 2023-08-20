@@ -146,3 +146,15 @@ contact_block=panel_divs[1].find_all(
 
 if contact_block:
     advertiser_contact=contact_block[0].text.strip()
+
+# advertiser num of ads
+num_of_ads_block=panel_body.find_all(
+    name='div',
+    style='display:inline-block'
+)
+
+if num_of_ads_block[-1]:
+    pattern = re.compile(r"\((\d+)\)")
+    num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
+    pattern.findall(num_of_ads)[0]
+    advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
