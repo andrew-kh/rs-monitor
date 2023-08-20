@@ -6,9 +6,9 @@
     "ad_update_dt": "{{ad_update_dt}}",
     "ad_caption": "{{ad_caption}}",
     "ad_text": "{{ad_text}}",
-    "ad_advertiser_info": {
-        {% for ad_info_line in ad_advertiser_info %}
-            "{{ ad_info_line }}":"{{ ad_advertiser_info[ad_info_line]}}"{% if not loop.last %},{% endif %}
+    "property_info": {
+        {% for ad_info_line in property_info %}
+            "{{ ad_info_line }}":"{{ property_info[ad_info_line]}}"{% if not loop.last %},{% endif %}
         {% endfor %}
     },
     "ad_num_of_images": {{ad_num_of_images}},
@@ -17,9 +17,9 @@
     "property_location": "{{property_location}}",
     "property_price": "{{property_price}}",
     "property_currency": "{{property_currency}}",
-    "property_info": {
-        {% for prop in property_info %}
-            "{{ prop }}":"{{ property_info[prop]}}"{% if not loop.last %},{% endif %}
+    "ad_advertiser_info": {
+        {% for prop in ad_advertiser_info %}
+            "{{ prop }}":"{{ ad_advertiser_info[prop]}}"{% if not loop.last %},{% endif %}
         {% endfor %}
     },
     "property_number_of_views": "{{property_number_of_views}}"

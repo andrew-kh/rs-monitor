@@ -99,7 +99,7 @@ num_of_view_block = ad_page.find(name='div',
 
 
 # get number of images in an ad
-ad_num_of_images = len(ad_page.find_all(name='figure'))
+ad_num_of_images = len(ad_page.find_all(name='figure')[0].find_all(name='img'))
 
 # get advertiser info pt 1
 div_with_adv_info_table = ad_page.find_all(
@@ -114,7 +114,7 @@ for block in adv_info_blocks_names:
                        string=re.compile(block)).text.strip()
     adv_info_blocks_values.append(val)
 
-{k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
+ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
 
 # get advertiser info pt 2
 div_panel_body=ad_page.find_all(
@@ -156,7 +156,7 @@ num_of_ads_block=panel_body.find_all(
 if num_of_ads_block[-1]:
     pattern = re.compile(r"\((\d+)\)")
     num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
-    pattern.findall(num_of_ads)[0]
+    num_of_ads=pattern.findall(num_of_ads)[0]
     advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
 
 
@@ -173,5 +173,7 @@ ad_object = template.render(
     ad_text=ad_text,
     property_price=property_price,
     property_currency=property_currency,
-    ad_advertiser_info=property_info
+    ad_advertiser_info=ad_advertiser_info,
+    property_info=property_info,
+    ad_num_of_images=ad_num_of_images
 )
