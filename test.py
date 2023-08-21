@@ -106,7 +106,7 @@ div_with_adv_info_table = ad_page.find_all(
     name='div',
     class_='default-widget')
 
-adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra', 'Broj pregleda']
+adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra']
 adv_info_blocks_values=[]
 
 for block in adv_info_blocks_names:
@@ -115,6 +115,11 @@ for block in adv_info_blocks_names:
     adv_info_blocks_values.append(val)
 
 ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
+
+# ad_num_of_views 
+ad_num_of_views_raw = ad_page.find(name='div',
+                                   string=re.compile('Broj pregleda')).text.strip()
+ad_num_of_views=ad_num_of_views_raw.replace('Broj pregleda: ','')
 
 # get advertiser info pt 2
 div_panel_body=ad_page.find_all(
@@ -159,6 +164,9 @@ if num_of_ads_block[-1]:
     num_of_ads=pattern.findall(num_of_ads)[0]
     advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
 
+ad_advertiser_info['advertiser_contact']=advertiser_contact
+ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
+ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
 
 ad_object = template.render(
     meta_retrieval_ts=meta_retrieval_ts,
@@ -175,5 +183,5 @@ ad_object = template.render(
     property_currency=property_currency,
     ad_advertiser_info=ad_advertiser_info,
     property_info=property_info,
-    ad_num_of_images=ad_num_of_images
+    ad_num_of_views=ad_num_of_views
 )

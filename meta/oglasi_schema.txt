@@ -22,5 +22,5 @@
             "{{ prop }}":"{{ ad_advertiser_info[prop]}}"{% if not loop.last %},{% endif %}
         {% endfor %}
     },
-    "property_number_of_views": "{{property_number_of_views}}"
+    "ad_num_of_views": "{{ad_num_of_views}}"
 }
