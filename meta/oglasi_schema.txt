@@ -6,6 +6,7 @@
     "ad_update_dt": "{{ad_update_dt}}",
     "ad_caption": "{{ad_caption}}",
     "ad_text": "{{ad_text}}",
+    "ad_descr_text": "{{ad_descr_text}}",
     "property_info": {
         {% for ad_info_line in property_info %}
             "{{ ad_info_line }}":"{{ property_info[ad_info_line]}}"{% if not loop.last %},{% endif %}

@@ -36,7 +36,6 @@ ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
 
 # fill in info for a single ad
 meta_retrieval_ts = int(time.time())
-meta_website = 'www.oglasi.rs'
 
 # parse breadcrumb of an ad page
 breadcrumb_html = ad_page.find('ol', class_='breadcrumb')
@@ -71,6 +70,10 @@ for div in ad_text_obj:
 
 if ad_text_list[1]==[]:
     ad_text = ''.join([i.text for i in ad_text_list[0]])
+
+ad_descr_text=ad_page.find_all(
+    name='div',
+    itemprop='description')[0].text.strip()
 
 # get ad price
 ad_price_html=ad_page.find_all(name='h3',
@@ -179,6 +182,7 @@ ad_object = template.render(
     ad_update_dt=ad_update_dt,
     ad_caption=ad_caption,
     ad_text=ad_text,
+    ad_descr_text=ad_descr_text,
     property_price=property_price,
     property_currency=property_currency,
     ad_advertiser_info=ad_advertiser_info,
