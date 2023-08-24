@@ -62,7 +62,7 @@ if len(ad_caption_html) == 1:
 
 # get ad text
 ad_text_obj=ad_page.find_all(name='div',
-                                   class_='col-sm-6')
+                             class_='col-sm-6')
 
 ad_text_list=[]
 for div in ad_text_obj:
@@ -76,8 +76,9 @@ ad_descr_text=ad_page.find_all(
     itemprop='description')[0].text.strip()
 
 # get ad price
-ad_price_html=ad_page.find_all(name='h3',
-                 itemprop='offers')
+ad_price_html=ad_page.find_all(
+    name='h3',
+    itemprop='offers')
 
 if len(ad_price_html)==1:
     property_price=ad_price_html[0].find(name='span',
