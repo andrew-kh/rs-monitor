@@ -6,7 +6,7 @@ import rsm_utils as rs
 from bs4 import BeautifulSoup
 
 TEMPLATE_PATH='./meta/'
-TEMPLATE_NAME='oglasi_schema.txt'
+TEMPLATE_NAME='oglasi_schema_test.txt'
 WEBSITE='https://www.oglasi.rs'
 AD_PATH='/nekretnine/prodaja-stanova/beograd?p=1&i=96'
 DATA_LOCATION='./data/landing/oglasi/sale/'
@@ -202,3 +202,5 @@ file_path=DATA_LOCATION+json_name
 
 with open(file_path, "w") as json_file:
     json_file.write(ad_object)
+
+print(f'saved file {file_path}')
