@@ -196,7 +196,7 @@ ad_object = ad_template.render(
     ad_num_of_views=ad_num_of_views
 )
 
-json_name=ad_links[1][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
+json_name=ad_links[args.ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
 file_path=DATA_LOCATION+json_name
 
 with open(file_path, "w") as json_file:
