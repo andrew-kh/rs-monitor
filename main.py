@@ -74,11 +74,11 @@ for div in ad_text_obj:
     ad_text_list.append(div.find_all(name='p'))
 
 if ad_text_list[1]==[]:
-    ad_text = ''.join([i.text for i in ad_text_list[0]])
+    ad_text = ''.join([i.text.strip().replace('\n','') for i in ad_text_list[0]])
 
 ad_descr_text=ad_page.find_all(
     name='div',
-    itemprop='description')[0].text.strip()
+    itemprop='description')[0].text.strip().replace('\n','')
 
 # get ad price
 ad_price_html=ad_page.find_all(
@@ -193,7 +193,8 @@ ad_object = ad_template.render(
     property_currency=property_currency,
     ad_advertiser_info=ad_advertiser_info,
     property_info=property_info,
-    ad_num_of_views=ad_num_of_views
+    ad_num_of_views=ad_num_of_views,
+    ad_num_of_images=ad_num_of_images
 )
 
 json_name=ad_links[args.ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
