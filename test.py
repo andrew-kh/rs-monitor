@@ -15,7 +15,7 @@ ad_object = template.render()
 
 # get single page with multiple ad highlights
 meta_website = 'https://www.oglasi.rs'
-ad_list_path = '/nekretnine/prodaja-stanova/beograd?i=96'
+ad_list_path = '/nekretnine/prodaja-stanova/beograd?p=1&i=96'
 ad_list_url = meta_website + ad_list_path
 response = requests.get(ad_list_url)
 soup = BeautifulSoup(response.text, "html.parser")
