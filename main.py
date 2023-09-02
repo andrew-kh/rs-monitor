@@ -153,14 +153,17 @@ if advertiser_name_div:
     advertiser_name=advertiser_name_div[0].text.strip()
 
 # advertiser contact
-if panel_divs[1]:
+try:
     contact_block=panel_divs[1].find_all(
         name='a',
         href=re.compile("tel:")
     )
 
-if contact_block:
-    advertiser_contact=contact_block[0].text.strip()
+    if contact_block:
+        advertiser_contact=contact_block[0].text.strip()
+except IndexError:
+    advertiser_contact=''
+
 
 # advertiser num of ads
 num_of_ads_block=panel_body.find_all(
