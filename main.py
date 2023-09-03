@@ -42,16 +42,18 @@ ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
 # fill in info for a single ad
 meta_retrieval_ts = int(time.time())
 
-# parse breadcrumb of an ad page
-breadcrumb_html = ad_page.find('ol', class_='breadcrumb')
-breadcrumb_items = breadcrumb_html.find_all('li')
+# # parse breadcrumb of an ad page
+# breadcrumb_html = ad_page.find('ol', class_='breadcrumb')
+# breadcrumb_items = breadcrumb_html.find_all('li')
 
-# get infro from breadcrumb
-ad_type = breadcrumb_items[2].find('a').text.strip()
+# # get infro from breadcrumb
+# ad_type = breadcrumb_items[2].find('a').text.strip()
 
-property_city = breadcrumb_items[3].find('a').text.strip()
-property_district = breadcrumb_items[4].find('a').text.strip()
-property_location = breadcrumb_items[5].find('a').text.strip()
+# property_city = breadcrumb_items[3].find('a').text.strip()
+# property_district = breadcrumb_items[4].find('a').text.strip()
+# property_location = breadcrumb_items[5].find('a').text.strip()
+
+ad_type,property_city,property_district,property_location=rs.parse_breadcrumb(ad_page)
 
 # get ad update dt
 ad_update_div = ad_page.find_all('div', class_='visible-sm visible-md visible-lg')

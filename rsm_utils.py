@@ -9,7 +9,7 @@ def make_json_template(template_path:str, template_name:str) -> Template:
     
     return template
 
-def parse_breadcrumb(ad_page:BeautifulSoup) -> tuple:
+def parse_breadcrumb(ad_page:BeautifulSoup) -> tuple[str,str,str,str]:
     """return ad type (sale/rent) and location from
     ad page's breadcrumb
     """
