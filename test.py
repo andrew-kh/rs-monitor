@@ -1,26 +1,30 @@
 import re
-import json
 import time
+import argparse
 import requests
+import rsm_utils as rs
 from bs4 import BeautifulSoup
-from jinja2 import Environment, FileSystemLoader
 
+TEMPLATE_PATH='./meta/'
+TEMPLATE_NAME='oglasi_schema_test.txt'
+WEBSITE='https://www.oglasi.rs'
+AD_PATH='/nekretnine/prodaja-stanova/beograd?p=1&i=96'
+DATA_LOCATION='./data/landing/oglasi/sale/'
 
-# jinja setup
-env = Environment(loader=FileSystemLoader('./meta/'))
-template = env.get_template('oglasi_schema.txt')
-ad_object = template.render()
+parser = argparse.ArgumentParser()
+parser.add_argument('--ad_number', type=int, required=True)
+args = parser.parse_args()
 
-# parser block
+# set up template
+ad_template = rs.make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)
 
-# get single page with multiple ad highlights
-meta_website = 'https://www.oglasi.rs'
-ad_list_path = '/nekretnine/prodaja-stanova/beograd?p=1&i=96'
+# get single ad page
+meta_website = WEBSITE
+ad_list_path = AD_PATH
 ad_list_url = meta_website + ad_list_path
 response = requests.get(ad_list_url)
 soup = BeautifulSoup(response.text, "html.parser")
 
-# get list of all ad highlights on the page
 ads = soup.find_all("article")
 
 # get list of links to each ad listed on the page
@@ -30,8 +34,9 @@ for ad in ads:
     ad_link = ad_link_object[0]['href']
     ad_links.append(ad_link)
 
+
 # get html of a single ad page
-ad_url = meta_website + ad_links[0]
+ad_url = meta_website + ad_links[args.ad_number]
 ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
 
 # fill in info for a single ad
@@ -69,11 +74,11 @@ for div in ad_text_obj:
     ad_text_list.append(div.find_all(name='p'))
 
 if ad_text_list[1]==[]:
-    ad_text = ''.join([i.text for i in ad_text_list[0]])
+    ad_text = ''.join([i.text.strip().replace('\n','') for i in ad_text_list[0]])
 
 ad_descr_text=ad_page.find_all(
     name='div',
-    itemprop='description')[0].text.strip()
+    itemprop='description')[0].text.strip().replace('\n','')
 
 # get ad price
 ad_price_html=ad_page.find_all(
@@ -148,13 +153,17 @@ if advertiser_name_div:
     advertiser_name=advertiser_name_div[0].text.strip()
 
 # advertiser contact
-contact_block=panel_divs[1].find_all(
-    name='a',
-    href=re.compile("tel:")
-)
+try:
+    contact_block=panel_divs[1].find_all(
+        name='a',
+        href=re.compile("tel:")
+    )
 
-if contact_block:
-    advertiser_contact=contact_block[0].text.strip()
+    if contact_block:
+        advertiser_contact=contact_block[0].text.strip()
+except IndexError:
+    advertiser_contact=''
+
 
 # advertiser num of ads
 num_of_ads_block=panel_body.find_all(
@@ -172,7 +181,7 @@ ad_advertiser_info['advertiser_contact']=advertiser_contact
 ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
 ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
 
-ad_object = template.render(
+ad_object = ad_template.render(
     meta_retrieval_ts=meta_retrieval_ts,
     meta_website=meta_website,
     ad_url=ad_url,
@@ -188,5 +197,14 @@ ad_object = template.render(
     property_currency=property_currency,
     ad_advertiser_info=ad_advertiser_info,
     property_info=property_info,
-    ad_num_of_views=ad_num_of_views
+    ad_num_of_views=ad_num_of_views,
+    ad_num_of_images=ad_num_of_images
 )
+
+json_name=ad_links[args.ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
+file_path=DATA_LOCATION+json_name
+
+with open(file_path, "w") as json_file:
+    json_file.write(ad_object)
+
+print(f'saved file {file_path}')
