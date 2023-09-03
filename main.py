@@ -12,8 +12,12 @@ AD_PATH='/nekretnine/prodaja-stanova/beograd?p=1&i=96'
 DATA_LOCATION='./data/landing/oglasi/sale/'
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--ad_number', type=int, required=True)
+parser.add_argument('--ad_from', type=int, required=True)
+parser.add_argument('--ad_to', type=int, required=True)
 args = parser.parse_args()
+
+ad_from = args.ad_from
+ad_to = args.ad_to
 
 # set up template
 ad_template = rs.make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)
@@ -35,182 +39,186 @@ for ad in ads:
     ad_links.append(ad_link)
 
 
-# get html of a single ad page
-ad_url = meta_website + ad_links[args.ad_number]
-ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
+for ad_number in range(ad_from, ad_to+1):
 
-# fill in info for a single ad
-meta_retrieval_ts = int(time.time())
+    # get html of a single ad page
+    ad_url = meta_website + ad_links[ad_number]
+    ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
 
-# # parse breadcrumb of an ad page
-# breadcrumb_html = ad_page.find('ol', class_='breadcrumb')
-# breadcrumb_items = breadcrumb_html.find_all('li')
+    print(f'\nattempting to parse:\n{ad_url}\n')
 
-# # get infro from breadcrumb
-# ad_type = breadcrumb_items[2].find('a').text.strip()
+    # fill in info for a single ad
+    meta_retrieval_ts = int(time.time())
 
-# property_city = breadcrumb_items[3].find('a').text.strip()
-# property_district = breadcrumb_items[4].find('a').text.strip()
-# property_location = breadcrumb_items[5].find('a').text.strip()
+    # # parse breadcrumb of an ad page
+    # breadcrumb_html = ad_page.find('ol', class_='breadcrumb')
+    # breadcrumb_items = breadcrumb_html.find_all('li')
 
-ad_type,property_city,property_district,property_location=rs.parse_breadcrumb(ad_page)
+    # # get infro from breadcrumb
+    # ad_type = breadcrumb_items[2].find('a').text.strip()
 
-# get ad update dt
-ad_update_div = ad_page.find_all('div', class_='visible-sm visible-md visible-lg')
-if len(ad_update_div) == 1:
-    ad_update_dt = ad_update_div[0].find('time').text.strip()
+    # property_city = breadcrumb_items[3].find('a').text.strip()
+    # property_district = breadcrumb_items[4].find('a').text.strip()
+    # property_location = breadcrumb_items[5].find('a').text.strip()
 
-# get ad caption
-ad_caption_html = ad_page.find_all(name='h1',
-                                   class_='fpogl-title text-primary',
-                                   itemprop='name')
-if len(ad_caption_html) == 1:
-    ad_caption = ad_caption_html[0].text.strip()
+    ad_type,property_city,property_district,property_location=rs.parse_breadcrumb(ad_page)
 
-# get ad text
-ad_text_obj=ad_page.find_all(name='div',
-                             class_='col-sm-6')
+    # get ad update dt
+    ad_update_div = ad_page.find_all('div', class_='visible-sm visible-md visible-lg')
+    if len(ad_update_div) == 1:
+        ad_update_dt = ad_update_div[0].find('time').text.strip()
 
-ad_text_list=[]
-for div in ad_text_obj:
-    ad_text_list.append(div.find_all(name='p'))
+    # get ad caption
+    ad_caption_html = ad_page.find_all(name='h1',
+                                    class_='fpogl-title text-primary',
+                                    itemprop='name')
+    if len(ad_caption_html) == 1:
+        ad_caption = ad_caption_html[0].text.strip()
 
-if ad_text_list[1]==[]:
-    ad_text = ''.join([i.text.strip().replace('\n','') for i in ad_text_list[0]])
+    # get ad text
+    ad_text_obj=ad_page.find_all(name='div',
+                                class_='col-sm-6')
 
-ad_descr_text=ad_page.find_all(
-    name='div',
-    itemprop='description')[0].text.strip().replace('\n','')
+    ad_text_list=[]
+    for div in ad_text_obj:
+        ad_text_list.append(div.find_all(name='p'))
 
-# get ad price
-ad_price_html=ad_page.find_all(
-    name='h3',
-    itemprop='offers')
+    if ad_text_list[1]==[]:
+        ad_text = ''.join([i.text.strip().replace('\n','') for i in ad_text_list[0]])
 
-if len(ad_price_html)==1:
-    property_price=ad_price_html[0].find(name='span',
-                                         itemprop='price').text
-    property_currency=ad_price_html[0].find(name='span',
-                                            itemprop='priceCurrency').text
+    ad_descr_text=ad_page.find_all(
+        name='div',
+        itemprop='description')[0].text.strip().replace('\n','')
 
+    # get ad price
+    ad_price_html=ad_page.find_all(
+        name='h3',
+        itemprop='offers')
 
-# parse table with info
-div_with_table = ad_page.find_all(name='div',
-                                  class_='col-sm-6')
-ad_info_table=div_with_table[0]. \
-                find(name='table'). \
-                find_all(name='tr')
-ad_info_list=[(i.find_all(name='td')[0].text.strip().strip(":"),
-               i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
-property_info={k:v for (k,v) in ad_info_list}
-
-# get number of views
-num_of_view_block = ad_page.find(name='div',
-                               string=re.compile('Broj pregleda')).text.strip()
+    if len(ad_price_html)==1:
+        property_price=ad_price_html[0].find(name='span',
+                                            itemprop='price').text
+        property_currency=ad_price_html[0].find(name='span',
+                                                itemprop='priceCurrency').text
 
 
-# get number of images in an ad
-ad_num_of_images = len(ad_page.find_all(name='figure')[0].find_all(name='img'))
+    # parse table with info
+    div_with_table = ad_page.find_all(name='div',
+                                    class_='col-sm-6')
+    ad_info_table=div_with_table[0]. \
+                    find(name='table'). \
+                    find_all(name='tr')
+    ad_info_list=[(i.find_all(name='td')[0].text.strip().strip(":"),
+                i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
+    property_info={k:v for (k,v) in ad_info_list}
 
-# get advertiser info pt 1
-div_with_adv_info_table = ad_page.find_all(
-    name='div',
-    class_='default-widget')
+    # get number of views
+    num_of_view_block = ad_page.find(name='div',
+                                string=re.compile('Broj pregleda')).text.strip()
 
-adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra']
-adv_info_blocks_values=[]
 
-for block in adv_info_blocks_names:
-    val_block = ad_page.find(name='div',
-                       string=re.compile(block))
-    if val_block:
-        val=val_block.text.strip()
-    else:
-        val=''
-    adv_info_blocks_values.append(val)
+    # get number of images in an ad
+    ad_num_of_images = len(ad_page.find_all(name='figure')[0].find_all(name='img'))
 
-ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
+    # get advertiser info pt 1
+    div_with_adv_info_table = ad_page.find_all(
+        name='div',
+        class_='default-widget')
 
-# ad_num_of_views 
-ad_num_of_views_raw = ad_page.find(name='div',
-                                   string=re.compile('Broj pregleda')).text.strip()
-ad_num_of_views=ad_num_of_views_raw.replace('Broj pregleda: ','')
+    adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra']
+    adv_info_blocks_values=[]
 
-# get advertiser info pt 2
-div_panel_body=ad_page.find_all(
-    name='div',
-    class_='panel-body')
+    for block in adv_info_blocks_names:
+        val_block = ad_page.find(name='div',
+                        string=re.compile(block))
+        if val_block:
+            val=val_block.text.strip()
+        else:
+            val=''
+        adv_info_blocks_values.append(val)
 
-if len(div_panel_body)==1:
-    panel_body=div_panel_body[0]
+    ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
 
-panel_divs=panel_body.find_all(
-    name='div',
-    style='margin-bottom:12px'
-)
+    # ad_num_of_views 
+    ad_num_of_views_raw = ad_page.find(name='div',
+                                    string=re.compile('Broj pregleda')).text.strip()
+    ad_num_of_views=ad_num_of_views_raw.replace('Broj pregleda: ','')
 
-# advertiser name
-advertiser_name_div = panel_divs[0].find_all(
-    name='div',
-    style='display:inline-block'
-)
+    # get advertiser info pt 2
+    div_panel_body=ad_page.find_all(
+        name='div',
+        class_='panel-body')
 
-if advertiser_name_div:
-    advertiser_name=advertiser_name_div[0].text.strip()
+    if len(div_panel_body)==1:
+        panel_body=div_panel_body[0]
 
-# advertiser contact
-try:
-    contact_block=panel_divs[1].find_all(
-        name='a',
-        href=re.compile("tel:")
+    panel_divs=panel_body.find_all(
+        name='div',
+        style='margin-bottom:12px'
     )
 
-    if contact_block:
-        advertiser_contact=contact_block[0].text.strip()
-except IndexError:
-    advertiser_contact=''
+    # advertiser name
+    advertiser_name_div = panel_divs[0].find_all(
+        name='div',
+        style='display:inline-block'
+    )
+
+    if advertiser_name_div:
+        advertiser_name=advertiser_name_div[0].text.strip()
+
+    # advertiser contact
+    try:
+        contact_block=panel_divs[1].find_all(
+            name='a',
+            href=re.compile("tel:")
+        )
+
+        if contact_block:
+            advertiser_contact=contact_block[0].text.strip()
+    except IndexError:
+        advertiser_contact=''
 
 
-# advertiser num of ads
-num_of_ads_block=panel_body.find_all(
-    name='div',
-    style='display:inline-block'
-)
+    # advertiser num of ads
+    num_of_ads_block=panel_body.find_all(
+        name='div',
+        style='display:inline-block'
+    )
 
-if num_of_ads_block[-1]:
-    pattern = re.compile(r"\((\d+)\)")
-    num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
-    num_of_ads=pattern.findall(num_of_ads)[0]
-    advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
+    if num_of_ads_block[-1]:
+        pattern = re.compile(r"\((\d+)\)")
+        num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
+        num_of_ads=pattern.findall(num_of_ads)[0]
+        advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
 
-ad_advertiser_info['advertiser_contact']=advertiser_contact
-ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
-ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
+    ad_advertiser_info['advertiser_contact']=advertiser_contact
+    ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
+    ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
 
-ad_object = ad_template.render(
-    meta_retrieval_ts=meta_retrieval_ts,
-    meta_website=meta_website,
-    ad_url=ad_url,
-    ad_type=ad_type,
-    property_city=property_city,
-    property_district=property_district,
-    property_location=property_location,
-    ad_update_dt=ad_update_dt,
-    ad_caption=ad_caption,
-    ad_text=ad_text,
-    ad_descr_text=ad_descr_text,
-    property_price=property_price,
-    property_currency=property_currency,
-    ad_advertiser_info=ad_advertiser_info,
-    property_info=property_info,
-    ad_num_of_views=ad_num_of_views,
-    ad_num_of_images=ad_num_of_images
-)
+    ad_object = ad_template.render(
+        meta_retrieval_ts=meta_retrieval_ts,
+        meta_website=meta_website,
+        ad_url=ad_url,
+        ad_type=ad_type,
+        property_city=property_city,
+        property_district=property_district,
+        property_location=property_location,
+        ad_update_dt=ad_update_dt,
+        ad_caption=ad_caption,
+        ad_text=ad_text,
+        ad_descr_text=ad_descr_text,
+        property_price=property_price,
+        property_currency=property_currency,
+        ad_advertiser_info=ad_advertiser_info,
+        property_info=property_info,
+        ad_num_of_views=ad_num_of_views,
+        ad_num_of_images=ad_num_of_images
+    )
 
-json_name=ad_links[args.ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
-file_path=DATA_LOCATION+json_name
+    json_name=ad_links[ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
+    file_path=DATA_LOCATION+json_name
 
-with open(file_path, "w") as json_file:
-    json_file.write(ad_object)
+    with open(file_path, "w") as json_file:
+        json_file.write(ad_object)
 
-print(f'saved file {file_path}')
+    print(f'saved file {file_path}')
