@@ -121,8 +121,12 @@ adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra']
 adv_info_blocks_values=[]
 
 for block in adv_info_blocks_names:
-    val = ad_page.find(name='div',
-                       string=re.compile(block)).text.strip()
+    val_block = ad_page.find(name='div',
+                       string=re.compile(block))
+    if val_block:
+        val=val_block.text.strip()
+    else:
+        val=''
     adv_info_blocks_values.append(val)
 
 ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
