@@ -1,3 +1,4 @@
+import re
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader, Template
 
@@ -84,3 +85,123 @@ def parse_ad_description_text(ad_page:BeautifulSoup) -> str:
         ad_descr_text=''
     
     return ad_descr_text
+
+
+def parse_price(ad_page:BeautifulSoup) -> tuple[str,str]:
+    """return property price and currency"""
+
+    ad_price_html=ad_page.find_all(
+        name='h3',
+        itemprop='offers')
+
+    if len(ad_price_html)==1:
+        property_price=ad_price_html[0].find(name='span',
+                                            itemprop='price').text
+        property_currency=ad_price_html[0].find(name='span',
+                                                itemprop='priceCurrency').text
+        
+    return property_price, property_currency
+
+
+def parse_property_info(ad_page:BeautifulSoup) -> dict:
+    """return property info section"""
+
+    div_with_table = ad_page.find_all(name='div',
+                                    class_='col-sm-6')
+    ad_info_table=div_with_table[0]. \
+                    find(name='table'). \
+                    find_all(name='tr')
+    ad_info_list=[(i.find_all(name='td')[0].text.strip().strip(":"),
+                i.find_all(name='td')[1].text.strip()) for i in ad_info_table]
+    property_info={k:v for (k,v) in ad_info_list}
+    
+    return property_info
+
+
+def parse_num_of_images(ad_page:BeautifulSoup) -> int:
+    """return number of images on the ad page"""
+
+    ad_num_of_images = len(ad_page.find_all(name='figure')[0].find_all(name='img'))
+    
+    return ad_num_of_images
+
+
+def parse_num_of_views(ad_page:BeautifulSoup) -> str:
+    """return number of views from ad page"""
+
+    ad_num_of_views_raw = ad_page.find(name='div',
+                                    string=re.compile('Broj pregleda')).text.strip()
+    ad_num_of_views=ad_num_of_views_raw.replace('Broj pregleda: ','')
+    
+    return ad_num_of_views
+
+
+def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
+    """return advertiser info section"""
+
+    adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra']
+    adv_info_blocks_values=[]
+
+    for block in adv_info_blocks_names:
+        val_block = ad_page.find(name='div',
+                        string=re.compile(block))
+        if val_block:
+            val=val_block.text.strip()
+        else:
+            val=''
+        adv_info_blocks_values.append(val)
+
+    ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
+
+    # get advertiser info pt 2
+    div_panel_body=ad_page.find_all(
+        name='div',
+        class_='panel-body')
+
+    if len(div_panel_body)==1:
+        panel_body=div_panel_body[0]
+
+    panel_divs=panel_body.find_all(
+        name='div',
+        style='margin-bottom:12px'
+    )
+
+    # advertiser name
+    advertiser_name_div = panel_divs[0].find_all(
+        name='div',
+        style='display:inline-block'
+    )
+
+    if advertiser_name_div:
+        advertiser_name=advertiser_name_div[0].text.strip()
+
+    # advertiser contact
+    try:
+        contact_block=panel_divs[1].find_all(
+            name='a',
+            href=re.compile("tel:")
+        )
+
+        if contact_block:
+            advertiser_contact=contact_block[0].text.strip()
+    except IndexError:
+        advertiser_contact=''
+
+
+    # advertiser num of ads
+    num_of_ads_block=panel_body.find_all(
+        name='div',
+        style='display:inline-block'
+    )
+
+    if num_of_ads_block[-1]:
+        pattern = re.compile(r"\((\d+)\)")
+        num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
+        num_of_ads=pattern.findall(num_of_ads)[0]
+        advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
+
+    ad_advertiser_info['advertiser_contact']=advertiser_contact
+    ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
+    ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
+    
+    return ad_advertiser_info
