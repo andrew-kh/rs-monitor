@@ -76,7 +76,7 @@ for ad_number in range(ad_from, ad_to+1):
     # ad_num_of_views 
     ad_num_of_views=rs.parse_num_of_views(ad_page)
 
-    ad_advertiser_info=re.parse_advertiser_info(ad_page)
+    ad_advertiser_info=rs.parse_advertiser_info(ad_page)
 
     ad_object = ad_template.render(
         meta_retrieval_ts=meta_retrieval_ts,
