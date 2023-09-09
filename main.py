@@ -1,6 +1,6 @@
 import os
 import time
-import argparse
+# import argparse
 import requests
 import rsm_utils as rs
 from bs4 import BeautifulSoup
@@ -11,13 +11,13 @@ WEBSITE='https://www.oglasi.rs'
 AD_PATH='/nekretnine/prodaja-stanova/beograd?p=1&i=96'
 DATA_LOCATION='./data/landing/oglasi/sale/'
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--ad_from', type=int, required=True)
-parser.add_argument('--ad_to', type=int, required=True)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument('--ad_from', type=int, required=True)
+# parser.add_argument('--ad_to', type=int, required=True)
+# args = parser.parse_args()
 
-ad_from = args.ad_from
-ad_to = args.ad_to
+# ad_from = args.ad_from
+# ad_to = args.ad_to
 
 # set up template
 ad_template = rs.make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)
@@ -43,7 +43,7 @@ parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
 if not os.path.exists(parsing_dir):
     os.makedirs(parsing_dir)
 
-for ad_number in range(ad_from, ad_to+1):
+for ad_number in range(len(ad_links)):
 
     # get html of a single ad page
     ad_url = meta_website + ad_links[ad_number]
