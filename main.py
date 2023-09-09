@@ -1,5 +1,6 @@
 import os
 import time
+import random
 # import argparse
 import requests
 import rsm_utils as rs
@@ -110,3 +111,5 @@ for ad_number in range(len(ad_links)):
         json_file.write(ad_object)
 
     print(f'saved file {file_path}')
+
+    time.sleep(random.uniform(0.3, 1.8))
