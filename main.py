@@ -122,3 +122,6 @@ for page_number in range(2,num_pages+1):
     ad_list_url = meta_website + ad_list_path
     response = requests.get(ad_list_url)
     soup = BeautifulSoup(response.text, "html.parser")
+
+    if page_number==3:
+        break
