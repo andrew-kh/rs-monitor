@@ -112,4 +112,4 @@ for ad_number in range(len(ad_links)):
 
     print(f'saved file {file_path}')
 
-    time.sleep(random.uniform(0.3, 1.8))
+    time.sleep(random.uniform(0.5, 2.3))

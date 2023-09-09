@@ -121,8 +121,11 @@ def parse_property_info(ad_page:BeautifulSoup) -> dict:
 def parse_num_of_images(ad_page:BeautifulSoup) -> int:
     """return number of images on the ad page"""
 
-    ad_num_of_images = len(ad_page.find_all(name='figure')[0].find_all(name='img'))
-    
+    try:
+        ad_num_of_images=len(ad_page.find_all(name='figure')[0].find_all(name='img'))
+    except IndexError:
+        ad_num_of_images=0        
+
     return ad_num_of_images
 
 
