@@ -208,3 +208,14 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
     ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
     
     return ad_advertiser_info
+
+
+def get_num_of_ad_pages(main_page:BeautifulSoup) -> int:
+    """return total number of pages with ads from the main page"""
+
+    num_pages_block=main_page.find_all(name='div',class_='form-group visible-sm-inline-block')
+    if num_pages_block:
+        num_pages=num_pages_block[0].text.strip().split('/')[1]
+        num_pages = int(re.findall(r'\d+', num_pages)[0])
+        
+    return num_pages

@@ -1,4 +1,5 @@
 import os
+import re
 import time
 import random
 # import argparse
@@ -29,6 +30,9 @@ ad_list_path = AD_PATH
 ad_list_url = meta_website + ad_list_path
 response = requests.get(ad_list_url)
 soup = BeautifulSoup(response.text, "html.parser")
+
+num_pages=rs.get_num_of_ad_pages(soup)
+
 
 ads = soup.find_all("article")
 
