@@ -143,18 +143,19 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
     """return advertiser info section"""
 
     adv_info_blocks_names=['Šifra oglasa', 'Agencijska šifra']
+    adv_info_block_lbls=['ad_code_number', 'ad_advertiser_code']
     adv_info_blocks_values=[]
 
     for block in adv_info_blocks_names:
         val_block = ad_page.find(name='div',
                         string=re.compile(block))
         if val_block:
-            val=val_block.text.strip()
+            val=val_block.text.strip().split(': ')[1]
         else:
             val=''
         adv_info_blocks_values.append(val)
 
-    ad_advertiser_info={k:v for (k,v) in [tuple(i.split(': ')) for i in adv_info_blocks_values]}
+    ad_advertiser_info={k:v for k,v in zip(adv_info_block_lbls, adv_info_blocks_values)}
 
     # get advertiser info pt 2
     div_panel_body=ad_page.find_all(
