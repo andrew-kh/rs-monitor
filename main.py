@@ -36,7 +36,7 @@ for page_number in range(1,num_pages+1):
 
     ads = soup.find_all("article")
 
-    print(f'----parsing page #{page_number} of {num_pages}')
+    print(f'----PARSING PAGE #{page_number} of {num_pages}------')
 
     # get list of links to each ad listed on the page
     ad_links = []
