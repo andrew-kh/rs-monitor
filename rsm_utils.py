@@ -185,11 +185,12 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
             name='a',
             href=re.compile("tel:")
         )
-
         if contact_block:
             advertiser_contact=contact_block[0].text.strip()
+        else:
+            advertiser_contact=''
     except IndexError:
-        advertiser_contact=''
+        advertiser_contact=''   
 
 
     # advertiser num of ads
@@ -210,7 +211,8 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
     ad_advertiser_info['advertiser_contact']=advertiser_contact
     ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
     ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
-    
+    ad_advertiser_info['advertiser_name']=advertiser_name
+
     return ad_advertiser_info
 
 
