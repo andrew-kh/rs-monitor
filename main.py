@@ -32,9 +32,11 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 num_pages=rs.get_num_of_ad_pages(soup)
 
-for page_number in range(2,num_pages+1):
+for page_number in range(1,num_pages+1):
 
     ads = soup.find_all("article")
+
+    print(f'----parsing page #{page_number} of {num_pages}')
 
     # get list of links to each ad listed on the page
     ad_links = []
@@ -122,6 +124,3 @@ for page_number in range(2,num_pages+1):
     ad_list_url = meta_website + ad_list_path
     response = requests.get(ad_list_url)
     soup = BeautifulSoup(response.text, "html.parser")
-
-    if page_number==3:
-        break
