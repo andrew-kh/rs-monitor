@@ -201,7 +201,10 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
     if num_of_ads_block[-1]:
         pattern = re.compile(r"\((\d+)\)")
         num_of_ads=num_of_ads_block[-1].find_all(name='a')[0].text
-        num_of_ads=pattern.findall(num_of_ads)[0]
+        if pattern.findall(num_of_ads):
+            num_of_ads=pattern.findall(num_of_ads)[0]
+        else:
+            num_of_ads=''
         advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
 
     ad_advertiser_info['advertiser_contact']=advertiser_contact
