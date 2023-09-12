@@ -38,8 +38,6 @@ for page_number in range(1,num_pages+1):
 
     print(f'----PARSING PAGE #{page_number} of {num_pages}------')
 
-    if not os.path.exists(parsing_dir):
-        os.makedirs(parsing_dir)
 
     # get list of links to each ad listed on the page
     ad_links = []
@@ -50,6 +48,9 @@ for page_number in range(1,num_pages+1):
 
     parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
 
+    if not os.path.exists(parsing_dir):
+        os.makedirs(parsing_dir)
+    
     for ad_number in range(len(ad_links)):
 
         # get html of a single ad page
