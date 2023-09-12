@@ -32,6 +32,11 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 num_pages=rs.get_num_of_ad_pages(soup)
 
+parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
+
+if not os.path.exists(parsing_dir):
+    os.makedirs(parsing_dir)
+    
 for page_number in range(1,num_pages+1):
 
     ads = soup.find_all("article")
@@ -46,10 +51,6 @@ for page_number in range(1,num_pages+1):
         ad_link = ad_link_object[0]['href']
         ad_links.append(ad_link)
 
-    parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
-
-    if not os.path.exists(parsing_dir):
-        os.makedirs(parsing_dir)
     
     for ad_number in range(len(ad_links)):
 
