@@ -38,6 +38,9 @@ for page_number in range(1,num_pages+1):
 
     print(f'----PARSING PAGE #{page_number} of {num_pages}------')
 
+    if not os.path.exists(parsing_dir):
+        os.makedirs(parsing_dir)
+
     # get list of links to each ad listed on the page
     ad_links = []
     for ad in ads:
@@ -46,9 +49,6 @@ for page_number in range(1,num_pages+1):
         ad_links.append(ad_link)
 
     parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
-
-    if not os.path.exists(parsing_dir):
-        os.makedirs(parsing_dir)
 
     for ad_number in range(len(ad_links)):
 
@@ -111,7 +111,7 @@ for page_number in range(1,num_pages+1):
 
         json_name=ad_links[ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
 
-        file_path=parsing_dir+json_name
+        file_path=parsing_dir+json_name[:200]
 
         with open(file_path, "w") as json_file:
             json_file.write(ad_object)
