@@ -58,7 +58,7 @@ for page_number in range(1,num_pages+1):
         ad_url = meta_website + ad_links[ad_number]
         ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
 
-        print(f'\nattempting to parse:\n{ad_url}\n')
+        # print(f'\nattempting to parse:\n{ad_url}\n')
 
         # fill in info for a single ad
         meta_retrieval_ts = int(time.time())
@@ -118,7 +118,7 @@ for page_number in range(1,num_pages+1):
         with open(file_path, "w") as json_file:
             json_file.write(ad_object)
 
-        print(f'saved file {file_path}')
+        # print(f'saved file {file_path}')
 
         time.sleep(random.uniform(0.5, 2.3))
 
