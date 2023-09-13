@@ -2,7 +2,7 @@ import os
 import re
 import time
 import random
-# import argparse
+import argparse
 import requests
 import rsm_utils as rs
 from bs4 import BeautifulSoup
@@ -12,17 +12,18 @@ TEMPLATE_NAME='oglasi_schema_test.txt'
 WEBSITE='https://www.oglasi.rs'
 DATA_LOCATION='./data/landing/oglasi/sale/'
 
-# parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 # parser.add_argument('--ad_from', type=int, required=True)
 # parser.add_argument('--ad_to', type=int, required=True)
-# args = parser.parse_args()
+parser.add_argument('--page_number', type=int, required=True)
+args = parser.parse_args()
 
 # ad_from = args.ad_from
 # ad_to = args.ad_to
-
+page_number=args.page_number
 # set up template
 ad_template = rs.make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)
-page_number=20
+# page_number=20
 # get single ad page
 meta_website = WEBSITE
 ad_list_path = f'/nekretnine/prodaja-stanova/beograd?p={page_number}&i=96'
