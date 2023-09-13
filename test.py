@@ -32,7 +32,7 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 num_pages=rs.get_num_of_ad_pages(soup)
 
-parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
+# parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
 
 
 ads = soup.find_all("article")
@@ -109,11 +109,11 @@ for ad_number in range(len(ad_links)):
 
     json_name=ad_links[ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
 
-    file_path=parsing_dir+json_name[:200]
+    # file_path=parsing_dir+json_name[:200]
 
-    with open(file_path, "w") as json_file:
-        json_file.write(ad_object)
+    # with open(file_path, "w") as json_file:
+    #     json_file.write(ad_object)
 
-    print(f'saved file {file_path}')
+    # print(f'saved file {file_path}')
 
     time.sleep(random.uniform(0.5, 2.3))
