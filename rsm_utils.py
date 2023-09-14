@@ -99,7 +99,10 @@ def parse_price(ad_page:BeautifulSoup) -> tuple[str,str]:
                                             itemprop='price').text
         property_currency=ad_price_html[0].find(name='span',
                                                 itemprop='priceCurrency').text
-        
+    else:
+        property_price=''
+        property_currency=''
+
     return property_price, property_currency
 
 
