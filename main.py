@@ -128,6 +128,3 @@ with open('./data/logs/rs-monitor-logs.txt', 'a') as file:
         ad_list_url = meta_website + ad_list_path
         response = requests.get(ad_list_url)
         soup = BeautifulSoup(response.text, "html.parser")
-
-        if page_number==3:
-            break
