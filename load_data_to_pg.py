@@ -36,7 +36,7 @@ for i in data_files_list:
         cursor.execute(sql_query)
         connection.commit()
 
-    except psycopg2.errors.SyntaxError:
+    except (psycopg2.errors.SyntaxError,json.decoder.JSONDecodeError):
         cursor.execute('ROLLBACK')
         connection.commit()
         print(f'error parsing file {i}')
