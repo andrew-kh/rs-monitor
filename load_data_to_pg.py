@@ -21,15 +21,16 @@ test_folder_path=f'/usr/project_rs_monitor/data/landing/oglasi/sale/{str(test_fo
 data_files_dir = os.listdir(test_folder_path)
 data_files_list=[file for file in data_files_dir if file.endswith('.json')]
 
-test_file_path=data_files_list[1]
 
-test_file_full_path=os.path.join(test_folder_path, test_file_path)
+for i in data_files_list:
 
-with open(test_file_full_path, 'r') as json_file:
-    json_data = json.load(json_file)
+    test_file_path=i
+    test_file_full_path=os.path.join(test_folder_path, test_file_path)
 
-sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data)}');"
+    with open(test_file_full_path, 'r') as json_file:
+        json_data = json.load(json_file)
 
+    sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data)}');"
 
-cursor.execute(sql_query)
-connection.commit()
+    cursor.execute(sql_query)
+    connection.commit()
