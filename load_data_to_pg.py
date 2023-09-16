@@ -30,7 +30,10 @@ for i in data_files_list:
     with open(test_file_full_path, 'r') as json_file:
         json_data = json.load(json_file)
 
-    sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data)}');"
+    try:
+        sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data)}');"
 
-    cursor.execute(sql_query)
-    connection.commit()
+        cursor.execute(sql_query)
+        connection.commit()
+    except psycopg2.errors.SyntaxError:
+        print(f'error parsing file {i}')
