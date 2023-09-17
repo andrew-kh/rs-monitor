@@ -32,7 +32,7 @@ for i in data_files_list:
         json_data = json.load(json_file)
 
     try:
-        sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data)}');"
+        sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data, ensure_ascii=False)}');"
 
         cursor.execute(sql_query)
         connection.commit()
