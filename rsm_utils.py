@@ -84,7 +84,7 @@ def parse_ad_description_text(ad_page:BeautifulSoup) -> str:
     else:
         ad_descr_text=''
     
-    return ad_descr_text
+    return ad_descr_text.replace('"', '\\"')
 
 
 def parse_price(ad_page:BeautifulSoup) -> tuple[str,str]:
