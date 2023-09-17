@@ -32,6 +32,7 @@ for i in data_files_list:
         json_data = json.load(json_file)
 
     try:
+        # this works if json_data is a dict, not a string repr of json'
         sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data, ensure_ascii=False)}');"
 
         cursor.execute(sql_query)
