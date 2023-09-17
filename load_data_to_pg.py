@@ -28,6 +28,7 @@ for i in data_files_list:
     test_file_full_path=os.path.join(test_folder_path, test_file_path)
 
     with open(test_file_full_path, 'r') as json_file:
+        print(test_file_full_path)
         json_data = json.load(json_file)
 
     try:
