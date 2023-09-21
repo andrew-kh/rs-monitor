@@ -33,9 +33,9 @@ for i in data_files_list:
 
     try:
         # this works if json_data is a dict, not a string repr of json'
-        sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data, ensure_ascii=False)}');"
+        # sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data, ensure_ascii=False)}');"
 
-        # cursor.execute("INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES (%s, %s::json)", (str(test_folder_id),json_data))
+        cursor.execute("INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES (%s, %s::json)", (str(test_folder_id),json_data))
 
         # cursor.execute(sql_query)
         connection.commit()
