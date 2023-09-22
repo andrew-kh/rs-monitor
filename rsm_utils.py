@@ -50,7 +50,7 @@ def parse_ad_caption(ad_page:BeautifulSoup) -> str:
     else:
         ad_caption=''
     
-    return ad_caption.replace('"', '\\"')
+    return ad_caption.replace("'", "\\'").replace('"', '\\"')
 
 
 def parse_ad_text(ad_page:BeautifulSoup) -> str:
