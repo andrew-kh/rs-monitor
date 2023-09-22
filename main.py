@@ -122,7 +122,7 @@ with open('./data/logs/rs-monitor-logs.txt', 'a') as file:
 
             file.write(f'saved file {file_path}')
 
-            time.sleep(random.uniform(0.5, 2.3))
+            time.sleep(random.uniform(0.5, 1.2))
 
         ad_list_path = f'/nekretnine/prodaja-stanova/beograd?p={page_number}&i=96'
         ad_list_url = meta_website + ad_list_path
