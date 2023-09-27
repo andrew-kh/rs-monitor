@@ -21,7 +21,7 @@ test_folder_path=f'/usr/project_rs_monitor/data/landing/oglasi/sale/{str(test_fo
 data_files_dir = os.listdir(test_folder_path)
 data_files_list=[file for file in data_files_dir if file.endswith('.json')]
 
-quarantine_path='/usr/project_rs_monitor/data/landing/quarantine/sale/'
+quarantine_path='/usr/project_rs_monitor/data/landing/quarantine/oglasi/sale/'
 
 num_files_proc=0
 
