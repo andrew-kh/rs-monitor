@@ -52,6 +52,8 @@ for i in data_files_list:
         new_file_path = os.path.join(quarantine_path, os.path.basename(test_file_full_path))
         os.rename(test_file_full_path, new_file_path)
 
+        os.replace(test_file_full_path, test_file_path)
+
     if num_files_proc == 500:
         break
     else:
