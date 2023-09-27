@@ -49,8 +49,8 @@ for i in data_files_list:
         connection.commit()
         # print(f'error parsing file {i}')
 
-        new_file_path = os.path.join(quarantine_path, os.path.basename(test_file_full_path))
-        os.rename(test_file_full_path, new_file_path)
+        # new_file_path = os.path.join(quarantine_path, os.path.basename(test_file_full_path))
+        # os.rename(test_file_full_path, new_file_path)
 
         os.replace(test_file_full_path, test_file_path)
 
