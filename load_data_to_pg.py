@@ -33,7 +33,7 @@ for i in data_files_list:
     try:
 
         with open(test_file_full_path, 'r') as json_file:
-            print(test_file_full_path)
+            # print(test_file_full_path)
             json_data = json.load(json_file)
             
         # this works if json_data is a dict, not a string repr of json'
@@ -53,8 +53,8 @@ for i in data_files_list:
         # os.rename(test_file_full_path, new_file_path)
 
         os.replace(test_file_full_path, test_file_path)
-
-    if num_files_proc == 500:
-        break
-    else:
-        num_files_proc+=1
+        print(f'moved {test_file_path} to quarantine')
+    # if num_files_proc == 500:
+    #     break
+    # else:
+    #     num_files_proc+=1
