@@ -4,6 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader, Template
 
+TEMPLATE_PATH='./meta/'
+TEMPLATE_NAME='oglasi_schema_test.txt'
+
 def make_json_template(template_path:str, template_name:str) -> Template:
     """return jinja2 Template to render ad jsons"""
 
@@ -12,6 +15,7 @@ def make_json_template(template_path:str, template_name:str) -> Template:
     
     return template
 
+ad_template=make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)
 
 def parse_breadcrumb(ad_page:BeautifulSoup) -> tuple[str,str,str,str]:
     """return ad type (sale/rent) and location from
@@ -232,7 +236,7 @@ def get_num_of_ad_pages(main_page:BeautifulSoup) -> int:
     return num_pages
 
 
-def parse_ad_page(ad_url:str,ad_template:Template) -> str:
+def parse_ad_page(ad_url:str,ad_template:Template=ad_template) -> str:
     """returns an json object with data from an ad_url"""
 
     meta_website=re.search("https.*?(?:[^@\/\n]+@)?([^:\/\n]+)", ad_url)[0]
