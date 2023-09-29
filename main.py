@@ -1,5 +1,5 @@
 import os
-import re
+# import re
 import time
 import random
 # import argparse
@@ -16,9 +16,6 @@ DATA_LOCATION='./data/landing/oglasi/sale/'
 # parser.add_argument('--ad_from', type=int, required=True)
 # parser.add_argument('--ad_to', type=int, required=True)
 # args = parser.parse_args()
-
-# ad_from = args.ad_from
-# ad_to = args.ad_to
 
 # set up template
 ad_template = rs.make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)

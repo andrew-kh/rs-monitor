@@ -21,3 +21,18 @@ where 1=1
 	and source_directory_id is not null
 group by 1
 order by 3 desc
+
+select
+	ad_json->>'property_district',
+	avg(split_part(replace(ad_json->>'property_price', '.', ''),',',1)::float) ttl_price,
+	sum((split_part(replace(ad_json->>'property_price', '.', ''),',',1)::float)
+	/
+	(replace(ad_json->'property_info'->>'Kvadratura', 'm2', '')::float))
+	/
+	count(ad_json->>'property_district') av_price_per_sqm	
+from dev.ads_demo
+where 1=1
+and ad_json->>'property_price' <> ''
+and ad_json->'property_info'->>'Kvadratura' <> '0m2'
+group by 1
+order by 3 desc

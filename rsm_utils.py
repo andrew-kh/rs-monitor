@@ -1,4 +1,6 @@
 import re
+import time
+import requests
 from bs4 import BeautifulSoup
 from jinja2 import Environment, FileSystemLoader, Template
 
@@ -228,3 +230,64 @@ def get_num_of_ad_pages(main_page:BeautifulSoup) -> int:
         num_pages = int(re.findall(r'\d+', num_pages)[0])
         
     return num_pages
+
+
+def parse_ad_page(ad_url:str,ad_template:Template) -> str:
+    """returns an json object with data from an ad_url"""
+
+    meta_website=re.search("https.*?(?:[^@\/\n]+@)?([^:\/\n]+)", ad_url)[0]
+
+    ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
+
+    # fill in info for a single ad
+    meta_retrieval_ts = int(time.time())
+
+    # # get infro from breadcrumb
+    ad_type,property_city,property_district,property_location=parse_breadcrumb(ad_page)
+
+    # get ad update dt
+    ad_update_dt = parse_ad_update_dt(ad_page)
+
+    # get ad caption
+    ad_caption = parse_ad_caption(ad_page)
+
+    # get ad text
+    ad_text=parse_ad_text(ad_page)
+
+    ad_descr_text=parse_ad_description_text(ad_page)
+
+    # get ad price
+    property_price, property_currency = parse_price(ad_page)
+
+    # parse table with info
+    property_info=parse_property_info(ad_page)
+
+    # get number of images in an ad
+    ad_num_of_images = parse_num_of_images(ad_page)
+
+    # ad_num_of_views 
+    ad_num_of_views=parse_num_of_views(ad_page)
+
+    ad_advertiser_info=parse_advertiser_info(ad_page)
+
+    ad_object = ad_template.render(
+        meta_retrieval_ts=meta_retrieval_ts,
+        meta_website=meta_website,
+        ad_url=ad_url,
+        ad_type=ad_type,
+        property_city=property_city,
+        property_district=property_district,
+        property_location=property_location,
+        ad_update_dt=ad_update_dt,
+        ad_caption=ad_caption,
+        ad_text=ad_text,
+        ad_descr_text=ad_descr_text,
+        property_price=property_price,
+        property_currency=property_currency,
+        ad_advertiser_info=ad_advertiser_info,
+        property_info=property_info,
+        ad_num_of_views=ad_num_of_views,
+        ad_num_of_images=ad_num_of_images
+    )
+
+    return ad_object
