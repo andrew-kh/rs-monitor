@@ -40,7 +40,7 @@ with open('./data/logs/rs-monitor-logs.txt', 'a') as file:
 
         ads = soup.find_all("article")
 
-        print(f'----PARSING PAGE #{page_number} of {num_pages}------')
+        # print(f'----PARSING PAGE #{page_number} of {num_pages}------')
 
 
         # get list of links to each ad listed on the page
@@ -55,62 +55,10 @@ with open('./data/logs/rs-monitor-logs.txt', 'a') as file:
 
             # get html of a single ad page
             ad_url = meta_website + ad_links[ad_number]
-            ad_page = BeautifulSoup(requests.get(ad_url).text, "html.parser")
 
-            file.write(f'\nattempting to parse:\n{ad_url}\n')
+            ad_object = rs.parse_ad_page(ad_url)
 
-            # fill in info for a single ad
-            meta_retrieval_ts = int(time.time())
-
-            # # get infro from breadcrumb
-            ad_type,property_city,property_district,property_location=rs.parse_breadcrumb(ad_page)
-
-            # get ad update dt
-            ad_update_dt = rs.parse_ad_update_dt(ad_page)
-
-            # get ad caption
-            ad_caption = rs.parse_ad_caption(ad_page)
-
-            # get ad text
-            ad_text=rs.parse_ad_text(ad_page)
-
-            ad_descr_text=rs.parse_ad_description_text(ad_page)
-
-            # get ad price
-            property_price, property_currency = rs.parse_price(ad_page)
-
-            # parse table with info
-            property_info=rs.parse_property_info(ad_page)
-
-            # get number of images in an ad
-            ad_num_of_images = rs.parse_num_of_images(ad_page)
-
-            # ad_num_of_views 
-            ad_num_of_views=rs.parse_num_of_views(ad_page)
-
-            ad_advertiser_info=rs.parse_advertiser_info(ad_page)
-
-            ad_object = ad_template.render(
-                meta_retrieval_ts=meta_retrieval_ts,
-                meta_website=meta_website,
-                ad_url=ad_url,
-                ad_type=ad_type,
-                property_city=property_city,
-                property_district=property_district,
-                property_location=property_location,
-                ad_update_dt=ad_update_dt,
-                ad_caption=ad_caption,
-                ad_text=ad_text,
-                ad_descr_text=ad_descr_text,
-                property_price=property_price,
-                property_currency=property_currency,
-                ad_advertiser_info=ad_advertiser_info,
-                property_info=property_info,
-                ad_num_of_views=ad_num_of_views,
-                ad_num_of_images=ad_num_of_images
-            )
-
-            json_name=ad_links[ad_number][1:].replace('/','_')+'_'+str(meta_retrieval_ts)+'.json'
+            json_name=ad_links[ad_number][1:].replace('/','_')+'_'+str(int(time.time()))+'.json'
 
             file_path=parsing_dir+json_name[:200]
 
