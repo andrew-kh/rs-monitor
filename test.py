@@ -22,6 +22,7 @@ soup = BeautifulSoup(response.text, "html.parser")
 num_pages=rs.get_num_of_ad_pages(soup)
 
 parsing_dir = DATA_LOCATION+f'{str(int(time.time()))}/'
+print(parsing_dir)
 
 if not os.path.exists(parsing_dir):
     os.makedirs(parsing_dir)
@@ -37,3 +38,12 @@ for ad in ads:
 
 with Pool(10) as p:
     result_list = p.map(rs.parse_ad_page, ad_links)
+
+
+for ad_object, file_name in zip(result_list, ad_links):
+
+    json_name=file_name.replace(WEBSITE,'')[1:].replace('/','_')+'_'+str(int(time.time()))+'.json'
+    file_path=parsing_dir+json_name[:200]
+
+    with open(file_path, "w") as json_file:
+        json_file.write(ad_object)
