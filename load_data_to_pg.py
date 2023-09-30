@@ -26,33 +26,24 @@ quarantine_path='/usr/project_rs_monitor/data/quarantine/oglasi/sale/'
 num_files_proc=0
 
 for i in data_files_list:
-
     test_file_path=i
     test_file_full_path=os.path.join(test_folder_path, test_file_path)
-
     try:
-
         with open(test_file_full_path, 'r') as json_file:
             # print(test_file_full_path)
-            json_data = json.load(json_file)
-            
+            json_data = json.load(json_file)    
         # this works if json_data is a dict, not a string repr of json'
         sql_query = f"INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES ({str(test_folder_id)}, '{json.dumps(json_data, ensure_ascii=False)}');"
-
         # cursor.execute("INSERT INTO dev.ads_demo (source_directory_id, ad_json) VALUES (%s, %s::json)", (str(test_folder_id),json_data))
-
         cursor.execute(sql_query)
         connection.commit()
-
     except (psycopg2.errors.SyntaxError,json.decoder.JSONDecodeError):
         cursor.execute('ROLLBACK')
         connection.commit()
         # print(f'error parsing file {i}')
-
         # new_file_path = os.path.join(quarantine_path, os.path.basename(test_file_full_path))
         # os.rename(test_file_full_path, new_file_path)
-
-        os.replace(test_file_full_path, quarantine_path)
+        os.replace(test_file_full_path, quarantine_path+test_file_path)
         print(f'moved {test_file_path} to quarantine')
     # if num_files_proc == 500:
     #     break
