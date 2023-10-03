@@ -56,7 +56,7 @@ def parse_ad_caption(ad_page:BeautifulSoup) -> str:
     else:
         ad_caption=''
     
-    return ad_caption.replace("'", "").replace('"', '').replace('\n',' ')
+    return replace_symbols(ad_caption)
 
 
 def parse_ad_text(ad_page:BeautifulSoup) -> str:
@@ -77,7 +77,7 @@ def parse_ad_text(ad_page:BeautifulSoup) -> str:
     else:
         ad_text=''
 
-    return ad_text.replace("'", "").replace('"', '').replace('\n',' ')
+    return replace_symbols(ad_text)
 
 
 def parse_ad_description_text(ad_page:BeautifulSoup) -> str:
@@ -90,7 +90,7 @@ def parse_ad_description_text(ad_page:BeautifulSoup) -> str:
     else:
         ad_descr_text=''
     
-    return ad_descr_text.replace("'", "").replace('"', '').replace('\n',' ')
+    return replace_symbols(ad_descr_text)
 
 
 def parse_price(ad_page:BeautifulSoup) -> tuple[str,str]:
@@ -295,3 +295,20 @@ def parse_ad_page(ad_url:str,ad_template:Template=ad_template) -> str:
     )
 
     return ad_object
+
+
+def replace_symbols(text:str) -> str:
+    """replaces a set of sybmols for json format"""
+
+    symbols_dict={
+        '"':'',
+        "'":"",
+        "\n": " ",
+        "\r": " "
+    }
+
+    translation_table = str.maketrans(symbols_dict)
+
+    clean_text = text.translate(translation_table)
+
+    return clean_text
