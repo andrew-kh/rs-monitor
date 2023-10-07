@@ -304,7 +304,8 @@ def replace_symbols(text:str) -> str:
         '"':'',
         "'":"",
         "\n": " ",
-        "\r": " "
+        "\r": " ",
+        "\t": " "
     }
 
     translation_table = str.maketrans(symbols_dict)
