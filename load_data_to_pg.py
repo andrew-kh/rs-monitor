@@ -20,7 +20,7 @@ cursor = connection.cursor()
 parser = argparse.ArgumentParser()
 parser.add_argument('--folder-id', type=int, required=True)
 args = parser.parse_args()
-test_folder_id=args['folder-id']
+test_folder_id=args.folder_id
 
 test_folder_id=test_folder_id
 test_folder_path=f'/usr/project_rs_monitor/data/landing/oglasi/sale/{test_folder_id}/'
