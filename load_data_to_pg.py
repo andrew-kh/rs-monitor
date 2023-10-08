@@ -1,5 +1,6 @@
 import os
 import json
+import argparse
 import psycopg2
 from get_env import get_env_data_as_dict
 
@@ -16,8 +17,13 @@ db_params = {
 connection = psycopg2.connect(**db_params)
 cursor = connection.cursor()
 
-test_folder_id=1696711067
-test_folder_path=f'/usr/project_rs_monitor/data/landing/oglasi/sale/{str(test_folder_id)}/'
+parser = argparse.ArgumentParser()
+parser.add_argument('--folder-id', type=int, required=True)
+args = parser.parse_args()
+test_folder_id=args['folder-id']
+
+test_folder_id=test_folder_id
+test_folder_path=f'/usr/project_rs_monitor/data/landing/oglasi/sale/{test_folder_id}/'
 data_files_dir = os.listdir(test_folder_path)
 data_files_list=[file for file in data_files_dir if file.endswith('.json')]
 
