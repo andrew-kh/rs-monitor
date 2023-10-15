@@ -300,7 +300,7 @@ def parse_ad_page(ad_url:str,ad_template:Template=ad_template) -> str:
     
     except:
 
-        print(f'error while processing then link {ad_url}')
+        print(f'error while processing the link {ad_url}')
 
 
 def replace_symbols(text:str) -> str:
