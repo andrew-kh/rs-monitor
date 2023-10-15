@@ -47,8 +47,11 @@ for page_number in range(1,num_pages+1):
     for ad_object, file_name in zip(result_list, ad_links):
         json_name=file_name.replace(WEBSITE,'')[1:].replace('/','_')+'_'+str(int(time.time()))+'.json'
         file_path=parsing_dir+json_name[:200]
-        with open(file_path, "w") as json_file:
-            json_file.write(ad_object)
+        try:
+            with open(file_path, "w") as json_file:
+                json_file.write(ad_object)
+        except:
+            print(f'error while saving file {json_name[:200]}')
 
     time.sleep(random.uniform(0.5, 1.2))
 
