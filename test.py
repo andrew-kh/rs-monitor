@@ -14,7 +14,7 @@ DATA_LOCATION='./data/landing/oglasi/sale/'
 ad_template = rs.make_json_template(template_path=TEMPLATE_PATH,template_name=TEMPLATE_NAME)
 page_number=1
 meta_website = WEBSITE
-ad_list_path = f'/nekretnine/prodaja-stanova/beograd?p={page_number}&i=96'
+ad_list_path = f'/nekretnine/prodaja-stanova/novi-sad?p={page_number}&i=96'
 ad_list_url = meta_website + ad_list_path
 response = requests.get(ad_list_url)
 soup = BeautifulSoup(response.text, "html.parser")
@@ -52,7 +52,7 @@ for page_number in range(1,num_pages+1):
 
     time.sleep(random.uniform(0.5, 1.2))
 
-    ad_list_path = f'/nekretnine/prodaja-stanova/beograd?p={page_number}&i=96'
+    ad_list_path = f'/nekretnine/prodaja-stanova/novi-sad?p={page_number}&i=96'
     ad_list_url = meta_website + ad_list_path
     response = requests.get(ad_list_url)
     soup = BeautifulSoup(response.text, "html.parser")
