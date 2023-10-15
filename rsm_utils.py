@@ -156,8 +156,10 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
     adv_info_blocks_values=[]
 
     for block in adv_info_blocks_names:
-        val_block = ad_page.find(name='div',
+        val_block = ad_page.find_all(name='div',
                         string=re.compile(block))
+
+        val_block=[i for i in val_block if i.get('itemprop')!='description'][0]
         if val_block:
             val=val_block.text.strip().split(': ')[1]
         else:
@@ -217,10 +219,10 @@ def parse_advertiser_info(ad_page:BeautifulSoup) -> dict:
             num_of_ads=''
         advertiser_ads_url=num_of_ads_block[-1].find_all(name='a')[0]['href']
 
-    ad_advertiser_info['advertiser_contact']=advertiser_contact
-    ad_advertiser_info['advertiser_num_of_ads']=num_of_ads
-    ad_advertiser_info['advertiser_ads_url']=advertiser_ads_url
-    ad_advertiser_info['advertiser_name']=advertiser_name
+    ad_advertiser_info['advertiser_contact']=replace_symbols(advertiser_contact)
+    ad_advertiser_info['advertiser_num_of_ads']=replace_symbols(num_of_ads)
+    ad_advertiser_info['advertiser_ads_url']=replace_symbols(advertiser_ads_url)
+    ad_advertiser_info['advertiser_name']=replace_symbols(advertiser_name)
 
     return ad_advertiser_info
 
